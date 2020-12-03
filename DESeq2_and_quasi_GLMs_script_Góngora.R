@@ -429,8 +429,8 @@ addline_format = function(x,...){
   gsub('\\s', '\n', x)
 }
 Effects <- ggplot(data = glm_effects, mapping = aes(x = ASV,
-                                                 y = reorder(Class, desc(Class)),
-                                                 fill = Effect)) +
+                                                    y = reorder(Class, desc(Class)),
+                                                    fill = Effect)) +
   geom_tile() +
   ylab(label = "Class") +
   facet_grid(~ Variable, switch = "x", labeller = labeller(Variable = addline_format(facet_labels))) +
@@ -582,6 +582,8 @@ grid.arrange(DE_sex, DE_status, ncol=1)
 
 #NMDS ordination with unweighted UniFrac metric
 murre_unw_ord = ordinate(pso, "NMDS", "unifrac")
+stress_unw = murre_unw_ord$stress
+stress_unw
 
 #Plot the unweighted UniFrac NMDS ordination
 group_colors = c("#08f002", "#f0027f")
@@ -590,12 +592,19 @@ unifrac_nmds = plot_ordination(pso, murre_unw_ord, type = "samples", color = "Se
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-  ) + scale_color_manual(values = group_colors, na.value = "#02f0ea", labels = c("Female", "Male", "Unknown")) +
-  scale_shape_discrete(name = "Stage", labels = c("Chick-rearing", "Incubating"))
+        legend.background = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank()
+  ) +
+  scale_color_manual(values = group_colors, na.value = "#02f0ea", labels = c("Female", "Male", "Unknown")) +
+  scale_shape_discrete(name = "Stage", labels = c("Chick-rearing", "Incubating")) +
+  annotate("text", x=0.32, y=-0.32, label="Stress = 0.21", size = 4)
 unifrac_nmds
 
 #NMDS ordination with weighted UniFrac metric
 murre_w_ord = ordinate(pso, "NMDS", "wunifrac")
+stress_w = murre_w_ord$stress
+stress_w
 
 #Plot the weighted UniFrac NMDS ordination
 wunifrac_nmds = plot_ordination(pso, murre_w_ord, type = "samples", color = "Sex", shape = "Status") +
@@ -603,8 +612,13 @@ wunifrac_nmds = plot_ordination(pso, murre_w_ord, type = "samples", color = "Sex
   theme_bw() +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-  ) + scale_color_manual(values = group_colors, na.value = "#02f0ea", labels = c("Female", "Male", "Unknown")) +
-  scale_shape_discrete(name = "Stage", labels = c("Chick-rearing", "Incubating"))
+        legend.background = element_blank(),
+        panel.background = element_blank(),
+        plot.background = element_blank()
+  ) +
+  scale_color_manual(values = group_colors, na.value = "#02f0ea", labels = c("Female", "Male", "Unknown")) +
+  scale_shape_discrete(name = "Stage", labels = c("Chick-rearing", "Incubating")) +
+  annotate("text", x=0.32, y=-0.11, label="Stress = 0.06", size = 4)
 wunifrac_nmds
 
 #Combine the two figures into a single object
